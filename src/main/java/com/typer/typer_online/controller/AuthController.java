@@ -3,7 +3,11 @@ package com.typer.typer_online.controller;
 
 import com.typer.typer_online.model.AuthenticationResponse;
 import com.typer.typer_online.model.Credentials;
+import com.typer.typer_online.model.Tip;
+import com.typer.typer_online.model.UsernameFreeResponse;
 import com.typer.typer_online.service.MyUserDetailService;
+import com.typer.typer_online.service.RegisterService;
+import com.typer.typer_online.service.TipService;
 import com.typer.typer_online.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600 )
 @RestController
 public class AuthController {
 
@@ -27,9 +31,18 @@ public class AuthController {
     @Autowired
     private MyUserDetailService userDetailService;
 
+    @Autowired
+    private RegisterService registerService;
+
+    @PostMapping(value = "/isUsernameFree")
+    public ResponseEntity<?> isUsernameFree(@RequestBody String username){
+        return ResponseEntity.ok(new UsernameFreeResponse(this.registerService.isUsernameFree(username)));
+    }
+
     @PostMapping(value = "/register", consumes = "application/json")
     public ResponseEntity<?> register(@RequestBody Credentials credentials){
-        return null;
+        this.registerService.register(credentials);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = "/login", consumes = "application/json")

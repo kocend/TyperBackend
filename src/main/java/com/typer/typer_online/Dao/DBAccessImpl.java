@@ -12,7 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 
-//@Transactional
+@Transactional
 @Component
 public class DBAccessImpl implements DBAccess {
 
@@ -38,7 +38,7 @@ public class DBAccessImpl implements DBAccess {
     @Override
     public User getUserDetailsByUsername(String username) throws UsernameNotFoundException {
 
-        Query query = entityManager.createQuery("FROM User u WHERE u.username=:name");
+        Query query = this.entityManager.createQuery("FROM User u WHERE u.username=:name");
         query.setParameter("name",username);
         List<User> users = query.getResultList();
 
@@ -49,13 +49,30 @@ public class DBAccessImpl implements DBAccess {
     }
 
     @Override
+    public boolean isUsernameFree(String username) {
+        Query query = this.entityManager.createQuery("FROM User u WHERE u.username=:name");
+        query.setParameter("name",username);
+        List<User> users = query.getResultList();
+
+
+        if(users.size() > 0)
+            return false;
+        else
+            return true;
+    }
+
+    @Override
     public void addTip(Tip tip) {
         this.entityManager.persist(tip);
     }
 
     @Override
     public Tip getTip(Integer userID, Integer gameID) {
-        List<Tip> tips = this.entityManager.createQuery("FROM Tip WHERE user_id="+userID+" AND game_id="+gameID).getResultList();
+        Query query = this.entityManager.createQuery("FROM Tip t WHERE t.user_id=:userID AND t.game_id=:gameID");
+        query.setParameter("userID", userID);
+        query.setParameter("gameID", gameID);
+        List<Tip> tips = query.getResultList();
+
         if(tips.size() != 0)
             return tips.get(0);
         else

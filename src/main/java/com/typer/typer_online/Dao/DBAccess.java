@@ -16,6 +16,8 @@ public interface DBAccess {
 
     public User getUserDetailsByUsername(String unsername) throws UsernameNotFoundException;
 
+    public boolean isUsernameFree(String username);
+
     public void addTip(Tip tip);
 
     public Tip getTip(Integer userID, Integer gameID);
