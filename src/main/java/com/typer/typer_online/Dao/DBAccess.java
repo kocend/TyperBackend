@@ -8,15 +8,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public interface DBAccess {
 
-    public void register();
+    public void register(User user);
 
-    public Integer getUserIdByName(String name);
-
-    public Integer getUserScores(Integer userID);
+    public Integer getUserIdByName(String name) throws UsernameNotFoundException;
 
     public User getUserDetailsByUsername(String unsername) throws UsernameNotFoundException;
 
     public boolean isUsernameFree(String username);
+
+    public Integer getUserScores(Integer userID);
 
     public void addTip(Tip tip);
 

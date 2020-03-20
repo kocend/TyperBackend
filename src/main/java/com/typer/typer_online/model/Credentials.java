@@ -1,8 +1,17 @@
 package com.typer.typer_online.model;
 
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotBlank;
+
 public class Credentials {
 
+    @NotBlank(message = "username cannot be blank")
+    @Length(max = 20)
     private String username;
+
+    @NotBlank(message = "password cannot be blank")
+    @Length(min = 4, max = 60)
     private String password;
 
     public Credentials() {

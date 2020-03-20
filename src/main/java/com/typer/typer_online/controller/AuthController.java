@@ -9,6 +9,7 @@ import com.typer.typer_online.service.MyUserDetailService;
 import com.typer.typer_online.service.RegisterService;
 import com.typer.typer_online.service.TipService;
 import com.typer.typer_online.util.JwtUtil;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +17,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600 )
@@ -40,9 +43,13 @@ public class AuthController {
     }
 
     @PostMapping(value = "/register", consumes = "application/json")
-    public ResponseEntity<?> register(@RequestBody Credentials credentials){
-        this.registerService.register(credentials);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> register(@Valid @RequestBody Credentials credentials){
+        if(this.registerService.isUsernameFree(credentials.getUsername())) {
+            this.registerService.register(credentials);
+            return ResponseEntity.ok().build();
+        }
+        else
+            return ResponseEntity.ok(new UsernameFreeResponse(false));
     }
 
     @PostMapping(value = "/login", consumes = "application/json")

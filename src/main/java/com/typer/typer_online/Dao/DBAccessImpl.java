@@ -20,18 +20,21 @@ public class DBAccessImpl implements DBAccess {
     private EntityManager entityManager;
 
     @Override
-    public void register() {
-
+    public void register(User user) {
+        this.entityManager.persist(user);
     }
 
     @Override
-    public Integer getUserIdByName(String name) {
-        return this.entityManager.createQuery("FROM User WHERE username = "+name).getFirstResult();
-    }
+    public Integer getUserIdByName(String name) throws UsernameNotFoundException {
+        Query query = this.entityManager.createQuery("FROM User u WHERE u.username=:name");
+        query.setParameter("name",name);
+        List<User> users = query.getResultList();
 
-    @Override
-    public Integer getUserScores(Integer userID) {
-        return null;
+        if(users.size()!= 0)
+            return users.get(0).getId();
+        else
+            throw new UsernameNotFoundException("No user found");
+
     }
 
 
@@ -59,6 +62,12 @@ public class DBAccessImpl implements DBAccess {
             return false;
         else
             return true;
+    }
+
+
+    @Override
+    public Integer getUserScores(Integer userID) {
+        return null;
     }
 
     @Override

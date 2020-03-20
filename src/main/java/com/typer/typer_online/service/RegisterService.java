@@ -2,6 +2,7 @@ package com.typer.typer_online.service;
 
 import com.typer.typer_online.Dao.DBAccess;
 import com.typer.typer_online.model.Credentials;
+import com.typer.typer_online.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,10 @@ public class RegisterService {
     }
 
     public void register(Credentials credentials){
-        //TODO
+        User user = new User();
+        user.setUsername(credentials.getUsername());
+        user.setPassword(credentials.getPassword());
+        user.setEnabled(true);
+        this.dbAccess.register(user);
     }
 }
