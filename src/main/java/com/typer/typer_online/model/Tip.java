@@ -13,6 +13,7 @@ public class Tip {
     private Integer game_id;
     private Integer home_score;
     private Integer away_score;
+    private Integer user_score;
 
     public Integer getTip_id() {
         return tip_id;
@@ -52,5 +53,13 @@ public class Tip {
 
     public void setAway_score(Integer away_score) {
         this.away_score = away_score;
+    }
+
+    public Integer getUser_score() {
+        return user_score;
+    }
+
+    public void setUser_score(Integer user_score) {
+        this.user_score = user_score;
     }
 }

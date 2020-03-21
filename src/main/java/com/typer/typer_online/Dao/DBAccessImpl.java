@@ -1,8 +1,10 @@
 package com.typer.typer_online.Dao;
 
 import com.typer.typer_online.model.Game;
+import com.typer.typer_online.model.Score;
 import com.typer.typer_online.model.Tip;
 import com.typer.typer_online.model.User;
+import javassist.NotFoundException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +39,13 @@ public class DBAccessImpl implements DBAccess {
 
     }
 
+    @Override
+    public String getUsernameById(Integer userID) {
+        Query query = this.entityManager.createQuery("FROM User u WHERE u.id = :id");
+        query.setParameter("id",userID);
+        List<User> users = query.getResultList();
+        return users.get(0).getUsername();
+    }
 
     @Override
     public User getUserDetailsByUsername(String username) throws UsernameNotFoundException {
@@ -98,11 +107,24 @@ public class DBAccessImpl implements DBAccess {
         }
     }
 
-    //@Transactional
     @Override
     public void addResult(Game game) {
         if(this.entityManager.find(Game.class,game.getGame_id()) == null)
             this.entityManager.persist(game);
     }
 
+    public Long getAllUserScoresByUserId(Integer userID){
+        Query query = this.entityManager.createQuery("SELECT SUM(t.user_score) FROM Tip t WHERE t.user_id=:id");
+        query.setParameter("id",userID);
+        List<Long> scores = query.getResultList();
+        return scores.get(0);
+    }
+
+    @Override
+    public List<Tip> getAllTips() {
+        Query query = this.entityManager.createQuery("FROM Tip");
+        List<Tip> tips = query.getResultList();
+
+        return tips;
+    }
 }

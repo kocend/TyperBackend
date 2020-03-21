@@ -18,6 +18,7 @@ public class TipService {
         Integer userId = this.dbAccess.getUserIdByName(auth.getName());
 
         tip.setUser_id(userId);
+        tip.setUser_score(0);
         this.dbAccess.addTip(tip);
     }
 
@@ -36,6 +37,7 @@ public class TipService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Integer userId = this.dbAccess.getUserIdByName(auth.getName());
 
+        tip.setUser_score(0);
         this.dbAccess.setTip(userId, gameId, tip);
     }
 

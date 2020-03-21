@@ -15,7 +15,6 @@ public class TipController {
 
     @PostMapping(value = "/tips", consumes = "application/json")
     public void addTip(@RequestBody Tip tip){
-        System.out.println(tip.toString());
         this.tipService.addTip(tip);
     }
 
