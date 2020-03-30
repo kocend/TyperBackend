@@ -7,6 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class TipService {
 
@@ -20,6 +22,13 @@ public class TipService {
         tip.setUser_id(userId);
         tip.setUser_score(0);
         this.dbAccess.addTip(tip);
+    }
+
+    public List<Tip> getAllUserTips(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Integer userId = this.dbAccess.getUserIdByName(auth.getName());
+
+        return this.dbAccess.getAllUserTipsByUserId(userId);
     }
 
     public Tip getTipByGameId(Integer gameID){

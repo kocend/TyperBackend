@@ -17,6 +17,11 @@ public class ScoreController {
         return ResponseEntity.ok(this.scoreService.getAllUserScores());
     }
 
+    @GetMapping(value = "/scores/all")
+    public ResponseEntity<?> getAllUsersAndScores(){
+        return ResponseEntity.ok(this.scoreService.getAllUsersAndScores());
+    }
+
     @GetMapping(value = "/scores/leagues/{id}")
     public ResponseEntity<?> getAllUsersAndScoresByLeagueId(@PathVariable(value = "id") Integer leagueID){
         return ResponseEntity.ok(this.scoreService.getAllUsersAndScoresByLeagueId(leagueID));

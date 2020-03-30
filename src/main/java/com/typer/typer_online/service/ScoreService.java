@@ -32,6 +32,11 @@ public class ScoreService {
         return this.dbAccess.getAllUserScoresByUserId(userId);
     }
 
+    public List<Score> getAllUsersAndScores(){
+        Predicate<Game> predicate = (Game game) -> { return true; };
+        return getScoresSatisfying(predicate);
+    }
+
     public List<Score> getAllUsersAndScoresByLeagueId(Integer leagueID){
         Predicate<Game> predicate = (Game game) -> { return game.getLeague_id().equals(leagueID); };
         return getScoresSatisfying(predicate);
@@ -70,8 +75,18 @@ public class ScoreService {
 
         for (Map.Entry<Integer, Integer> entry : userScores.entrySet()) {
             String username = this.dbAccess.getUsernameById(entry.getKey());
-            scores.add(new Score(username, entry.getValue()));
+            scores.add(new Score(0, username, entry.getValue()));
         }
+
+        scores.sort((a, b) -> {
+            if(a.getPoints() > b.getPoints())
+                return -1;
+            else
+                return 1;
+        });
+
+        for(int i = 0; i < scores.size(); i++)
+            scores.get(i).setPosition(i+1);
 
         return scores;
     }

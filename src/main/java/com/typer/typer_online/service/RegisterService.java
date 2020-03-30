@@ -12,6 +12,9 @@ public class RegisterService {
     @Autowired
     DBAccess dbAccess;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     public boolean isUsernameFree(String username){
         return this.dbAccess.isUsernameFree(username);
     }
@@ -19,7 +22,7 @@ public class RegisterService {
     public void register(Credentials credentials){
         User user = new User();
         user.setUsername(credentials.getUsername());
-        user.setPassword(credentials.getPassword());
+        user.setPassword(this.passwordEncoder.encodePassword(credentials.getPassword()));
         user.setEnabled(true);
         this.dbAccess.register(user);
     }

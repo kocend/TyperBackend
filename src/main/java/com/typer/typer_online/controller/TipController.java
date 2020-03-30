@@ -4,6 +4,7 @@ package com.typer.typer_online.controller;
 import com.typer.typer_online.model.Tip;
 import com.typer.typer_online.service.TipService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -16,6 +17,11 @@ public class TipController {
     @PostMapping(value = "/tips", consumes = "application/json")
     public void addTip(@RequestBody Tip tip){
         this.tipService.addTip(tip);
+    }
+
+    @GetMapping(value = "/tips")
+    public ResponseEntity<?> getAllMyTips(){
+        return ResponseEntity.ok(this.tipService.getAllUserTips());
     }
 
     @GetMapping(value = "/tips/{id}")

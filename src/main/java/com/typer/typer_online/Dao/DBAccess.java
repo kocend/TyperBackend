@@ -27,6 +27,8 @@ public interface DBAccess {
 
     public Tip getTip(Integer userID, Integer gameID);
 
+    public List<Tip> getAllUserTipsByUserId(Integer userId);
+
     public List<Tip> getAllTips();
 
     public void setTip(Integer userID, Integer gameID, Tip tip);

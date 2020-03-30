@@ -1,10 +1,8 @@
 package com.typer.typer_online.Dao;
 
 import com.typer.typer_online.model.Game;
-import com.typer.typer_online.model.Score;
 import com.typer.typer_online.model.Tip;
 import com.typer.typer_online.model.User;
-import javassist.NotFoundException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,6 +80,15 @@ public class DBAccessImpl implements DBAccess {
     @Override
     public void addTip(Tip tip) {
         this.entityManager.persist(tip);
+    }
+
+    @Override
+    public List<Tip> getAllUserTipsByUserId(Integer userId) {
+        Query query = this.entityManager.createQuery("FROM Tip t WHERE t.user_id=:id");
+        query.setParameter("id", userId);
+        List<Tip> userTips = query.getResultList();
+
+        return userTips;
     }
 
     @Override
