@@ -7,12 +7,9 @@ import com.typer.typer_online.model.GameJSON;
 import com.typer.typer_online.model.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.List;
 
 

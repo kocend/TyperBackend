@@ -34,7 +34,12 @@ public class Game {
         this.home_score = gameJSON.getIntHomeScore();
         this.away_score = gameJSON.getIntAwayScore();
         this.round = gameJSON.getIntRound();
-        this.event_timestamp = Timestamp.valueOf(gameJSON.getDateEvent()+" "+gameJSON.getStrTimeLocal());
+        try{
+            this.event_timestamp = Timestamp.valueOf(gameJSON.getDateEvent()+" "+gameJSON.getStrTimeLocal());
+        }
+        catch (IllegalArgumentException ex){
+            this.event_timestamp = null;
+        }
         this.home_team_id = gameJSON.getIdHomeTeam();
         this.away_team_id = gameJSON.getIdAwayTeam();
     }

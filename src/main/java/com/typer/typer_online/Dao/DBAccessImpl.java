@@ -83,15 +83,6 @@ public class DBAccessImpl implements DBAccess {
     }
 
     @Override
-    public List<Tip> getAllUserTipsByUserId(Integer userId) {
-        Query query = this.entityManager.createQuery("FROM Tip t WHERE t.user_id=:id");
-        query.setParameter("id", userId);
-        List<Tip> userTips = query.getResultList();
-
-        return userTips;
-    }
-
-    @Override
     public Tip getTip(Integer userID, Integer gameID) {
         Query query = this.entityManager.createQuery("FROM Tip t WHERE t.user_id=:userID AND t.game_id=:gameID");
         query.setParameter("userID", userID);
@@ -115,16 +106,12 @@ public class DBAccessImpl implements DBAccess {
     }
 
     @Override
-    public void addResult(Game game) {
-        if(this.entityManager.find(Game.class,game.getGame_id()) == null)
-            this.entityManager.persist(game);
-    }
+    public List<Tip> getAllUserTipsByUserId(Integer userId) {
+        Query query = this.entityManager.createQuery("FROM Tip t WHERE t.user_id=:id");
+        query.setParameter("id", userId);
+        List<Tip> userTips = query.getResultList();
 
-    public Long getAllUserScoresByUserId(Integer userID){
-        Query query = this.entityManager.createQuery("SELECT SUM(t.user_score) FROM Tip t WHERE t.user_id=:id");
-        query.setParameter("id",userID);
-        List<Long> scores = query.getResultList();
-        return scores.get(0);
+        return userTips;
     }
 
     @Override
@@ -133,5 +120,26 @@ public class DBAccessImpl implements DBAccess {
         List<Tip> tips = query.getResultList();
 
         return tips;
+    }
+
+    @Override
+    public List<Tip> getAllUnmarkedTips(){
+        Query query = this.entityManager.createQuery("FROM Tip t WHERE t.user_score = NULL");
+        List<Tip> unMarkedTips = query.getResultList();
+        return unMarkedTips;
+    }
+
+    @Override
+    public void addResult(Game game) {
+        if(this.entityManager.find(Game.class,game.getGame_id()) == null)
+            this.entityManager.persist(game);
+    }
+
+    @Override
+    public Long getAllUserScoresByUserId(Integer userID){
+        Query query = this.entityManager.createQuery("SELECT SUM(t.user_score) FROM Tip t WHERE t.user_id=:id");
+        query.setParameter("id",userID);
+        List<Long> scores = query.getResultList();
+        return scores.get(0);
     }
 }

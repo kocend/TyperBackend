@@ -56,10 +56,25 @@ public class Tip {
     }
 
     public Integer getUser_score() {
-        return user_score;
+        if(user_score != null)
+            return user_score;
+        else
+            return 0;
     }
 
     public void setUser_score(Integer user_score) {
         this.user_score = user_score;
+    }
+
+    @Override
+    public String toString() {
+        return "Tip{" +
+                "tip_id=" + tip_id +
+                ", user_id=" + user_id +
+                ", game_id=" + game_id +
+                ", home_score=" + home_score +
+                ", away_score=" + away_score +
+                ", user_score=" + user_score +
+                '}';
     }
 }
