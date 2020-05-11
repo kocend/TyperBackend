@@ -1,6 +1,7 @@
 package com.typer.typer_online.Dao;
 
 import com.typer.typer_online.model.Game;
+import com.typer.typer_online.model.Log;
 import com.typer.typer_online.model.Tip;
 import com.typer.typer_online.model.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,6 +19,11 @@ public class DBAccessImpl implements DBAccess {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Override
+    public void log(Log log){
+        this.entityManager.persist(log);
+    }
 
     @Override
     public void register(User user) {
@@ -101,6 +107,15 @@ public class DBAccessImpl implements DBAccess {
         if(persistedTip != null) {
             persistedTip.setHome_score(tip.getHome_score());
             persistedTip.setAway_score(tip.getAway_score());
+            this.entityManager.flush();
+        }
+    }
+
+    @Override
+    public void setUserScore(Integer userID, Integer gameID, Integer score) {
+        Tip persistedTip = this.getTip(userID,gameID);
+        if(persistedTip != null) {
+            persistedTip.setUser_score(score);
             this.entityManager.flush();
         }
     }

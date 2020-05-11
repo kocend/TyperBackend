@@ -23,16 +23,27 @@ public class PointScoringService {
 
     @Autowired
     private EventService eventService;
-
+        //0,10,20,30,40,50
     @Scheduled(cron = "0 0,10,20,30,40,50 * * * *")
     private void markUsersTips(){
 
+        System.out.println("markUsersTips()");
+        System.out.println("loading tips ...");
+
         List<Tip> unMarkedTips = dbAccess.getAllUnmarkedTips();
 
+        System.out.println("tips loaded !");
+        System.out.println("tips proceeding ...");
+
         unMarkedTips.forEach(tip -> {
+
+            System.out.println(tip.toString());
+
             GameJSON game = eventService.getGameById(tip.getGame_id());
             if(game.getIntHomeScore() == null || game.getIntAwayScore() == null)
                 return;
+
+            System.out.println("Scores not null!");
 
             Integer points = 0;
 
@@ -58,9 +69,10 @@ public class PointScoringService {
                     && game.getIntHomeScore() < game.getIntAwayScore())
                 points++;
 
-            tip.setUser_score(points);
+            System.out.println("Points: " + points);
 
-            dbAccess.setTip(tip.getUser_id(),tip.getGame_id(),tip);
+            dbAccess.setUserScore(tip.getUser_id(),tip.getGame_id(), points);
         });
+        System.out.println("Done tips are marked !");
     }
 }

@@ -43,7 +43,7 @@ public class EventService {
     }
 
     public GameJSON getGameById(int gameID){
-        return webClientBuilder
+        List<GameJSON> games = webClientBuilder
                 .build()
                 .get()
                 .uri("https://www.thesportsdb.com/api/v1/json/1/lookupevent.php?id="+gameID)
@@ -51,8 +51,16 @@ public class EventService {
                 .retrieve()
                 .bodyToMono(EventsJSON.class)
                 .block()
-                .getEvents()
-                .get(0);
+                .getEvents();
+
+        if(games == null) {
+            System.out.println(gameID + " returned null!!!");
+            return new GameJSON();
+        }
+
+        System.out.println(gameID + " returned: " + games.get(0).getIdEvent());
+
+        return games.get(0);
     }
 
     public Result getResultByGameId(int gameID){
